@@ -1,15 +1,12 @@
 {% extends 'hobbyapp/base.html' %}
 
 {% block content %}
-    <h1>LOGIN</h1>
+    <h1>SIGNUP</h1>
     <div>
         <form method="POST">
             {% csrf_token %}
             {{ form }}
             <input type="submit" />
         </form>
-        <div>
-            <a href="{% url 'signup'  %}">Dont Have an account? Sign Up</a>
-        </div>
     </div>
 {% endblock %}

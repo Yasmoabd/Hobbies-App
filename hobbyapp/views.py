@@ -30,3 +30,17 @@ def login_view(request):
     return render(request, 'hobbyapp/login.html', {
         'form': UserForm()
     })
+
+def signup_view(request):
+    form = UserForm()
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            login(request, user)
+            return index(request)
+    return render(request, 'hobbyapp/signup.html', {
+        'form': form,
+    })
