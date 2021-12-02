@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 
 from hobbyapp.forms import UserForm
@@ -31,6 +31,10 @@ def login_view(request):
     return render(request, 'hobbyapp/login.html', {
         'form': UserForm()
     })
+
+def logout_view(request):
+    logout(request)
+    return login_view(request)
 
 def signup_view(request):
     form = UserForm()

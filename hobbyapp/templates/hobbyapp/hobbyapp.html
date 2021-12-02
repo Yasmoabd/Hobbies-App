@@ -22,15 +22,30 @@
         </div>
         <div>
             <h2>Email Adress:</h2>
-            {{user.email}}
+            [[user.email]]
+            <form>
+                <label for="email">CHANGE EMAIL:</label><br>
+                <input type="text" id="email" name="email"><br>
+              </form>
+              <button type="button" v-on:click="changeEmail">Save</button>
         </div>
         <div>
             <h2>Date of Birth:</h2>
-            {{user.dateOfBirth}}
+            [[user.dob]]
+            <form>
+                <label for="dob">CHANGE D.O.B:</label><br>
+                <input type="date" id="dob" name="dob"><br>
+              </form>
+              <button type="button" v-on:click="changedob">Save</button>
         </div>
         <div>
             <h2>Hobbies:</h2>
             [[user.hobbies]]
+            <p>CHANGE HOBBIES:</p>
+            <select id="hobbyDrop" name="hobbyDrop" id="hobbyDrop" multiple>
+                <option v-for="(hobby) in allHobbies" v-bind:value="hobby.id">[[ hobby.name ]]</option>
+            </select>
+            
         </div>
         
     </div>
@@ -43,7 +58,7 @@
         data() {
             return {
                 user: null,
-                imageurl:null
+                allHobbies: [],
             }
         },
         async created() {
@@ -55,8 +70,45 @@
             else {
                 alert("Failed to load user data");
             }
+
+            let response2 = await fetch("{% url 'hobbies api' %}");
+            if (response2.ok) {
+                let data = await response2.json();
+                this.allHobbies = data.allHobbies;
+            }
+            else {
+                alert("Failed to load list of hobbies");
+            }
         },
         methods: {
+            async changeEmail(){
+                var email = document.getElementById('email').value;
+                obj = {email:email};
+                let response = await fetch("{% url 'user email api'%}",{method:"POST", body: JSON.stringify(obj),
+                headers: {
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken").value,
+                        }});
+                if (response.ok) {
+                    this.user.email=email
+                }
+                else{
+                    alert("Failed to chnage email");
+                }
+            },
+            async changedob(){
+                var dob = document.getElementById('dob').value;
+                obj = {dob:dob};
+                let response = await fetch("{% url 'user dob api'%}",{method:"POST", body: JSON.stringify(obj),
+                headers: {
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken").value,
+                        }});
+                if (response.ok) {
+                    this.user.dob=dob
+                }
+                else{
+                    alert("Failed to chnage city");
+                }
+            },
             async changeCity(){
                 var city = document.getElementById('city').value;
                 obj = {city:city};

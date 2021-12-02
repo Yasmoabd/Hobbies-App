@@ -9,6 +9,13 @@ class Hobby(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
+
+
 
 class User(AbstractUser):
     profileImage = models.ImageField(upload_to='images', default="media/defaultpic.png")
