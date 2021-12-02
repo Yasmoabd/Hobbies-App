@@ -2,12 +2,51 @@
 
 {% block content %}
     <div id="app">
-        hello world!
+        <div>
+            <img src="{{user.profileImage}}" alt="">
+        </div>
+        <div>
+            {{user.city}}
+        </div>
+        <div>
+            {{user.email}}
+        </div>
+        <div>
+            {{user.hobbies}}
+        </div>
+        <div>
+            {{user.dateOfBirth}}
+        </div>
+        
     </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
+    let myApp = Vue.createApp({
+        delimiters: ["[[", "]]"],
+        data() {
+            return {
+                user: null
+            }
+        },
+        async created() {
+            let response = await fetch("{% url 'user api' %}");
+            if (response.ok) {
+                let data = await response.json();
+                this.user = data.user;
+            }
+            else {
+                alert("Failed to load user data");
+            }
+        },
+        methods: {
+            
+
+
+        }
+    })
     
+    myApp.mount('#app')
 </script>
 {% endblock %}

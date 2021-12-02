@@ -6,6 +6,9 @@ import datetime
 class Hobby(models.Model):
     name = models.CharField(max_length=200)
 
+    def __str__(self):
+        return f"{self.name}"
+
 
 class User(AbstractUser):
     profileImage = models.ImageField(upload_to = 'profile_pic',default = 'media/default_pic.png')
