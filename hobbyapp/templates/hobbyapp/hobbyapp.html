@@ -1,21 +1,36 @@
 {% extends 'hobbyapp/base.html' %}
 
 {% block content %}
+{% csrf_token %}
     <div id="app">
         <div>
-            <img src="{{user.profileImage}}" alt="">
+            <h1>PROFILE PAGE</h1>
         </div>
         <div>
-            {{user.city}}
+            <h2>Profile pic</h2>
+            <img src="{{user.profileImage.url}}"  style="width:100px;height:100px;">
+            
         </div>
         <div>
+            <h2>City:</h2>
+            [[user.city]]
+            <form>
+                <label for="city">CHANGE CITY:</label><br>
+                <input type="text" id="city" name="city"><br>
+              </form>
+              <button type="button" v-on:click="changeCity">Save</button>
+        </div>
+        <div>
+            <h2>Email Adress:</h2>
             {{user.email}}
         </div>
         <div>
-            {{user.hobbies}}
+            <h2>Date of Birth:</h2>
+            {{user.dateOfBirth}}
         </div>
         <div>
-            {{user.dateOfBirth}}
+            <h2>Hobbies:</h2>
+            [[user.hobbies]]
         </div>
         
     </div>
@@ -27,7 +42,8 @@
         delimiters: ["[[", "]]"],
         data() {
             return {
-                user: null
+                user: null,
+                imageurl:null
             }
         },
         async created() {
@@ -41,7 +57,20 @@
             }
         },
         methods: {
-            
+            async changeCity(){
+                var city = document.getElementById('city').value;
+                obj = {city:city};
+                let response = await fetch("{% url 'user city api'%}",{method:"POST", body: JSON.stringify(obj),
+                headers: {
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken").value,
+                        }});
+                if (response.ok) {
+                    this.user.city=city
+                }
+                else{
+                    alert("Failed to chnage city");
+                }
+            }
 
 
         }

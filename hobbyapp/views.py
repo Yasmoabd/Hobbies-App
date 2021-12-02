@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.utils import timezone
 
 from hobbyapp.forms import UserForm
+from .models import User,Hobby
 # Create your views here.
 def index(request):
     
@@ -44,3 +45,4 @@ def signup_view(request):
     return render(request, 'hobbyapp/signup.html', {
         'form': form,
     })
+
