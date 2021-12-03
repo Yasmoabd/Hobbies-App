@@ -9,6 +9,11 @@ from django.utils import timezone
 from hobbyapp.forms import UserForm
 from .models import User,Hobby
 # Create your views here.
+def matches_view(request):
+    return render(request, 'hobbyapp/matches.html',{
+        'title': "Hobbies App",
+    })
+
 def profile_view(request):
     return render(request, 'hobbyapp/hobbyapp.html',{
         'title': "Hobbies App",

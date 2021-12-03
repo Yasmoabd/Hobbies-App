@@ -1,0 +1,62 @@
+{% extends 'hobbyapp/base.html' %}
+
+{% block content %}
+{% csrf_token %}
+    <div id="app">
+        <h1>Simliar Hobby Users</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Number of matching hobbies</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(otherUser, index) in matches">
+                    <th scope="row">
+                        [[ index ]]
+                    </th>
+                    <td>
+                            [[ otherUser.name ]]          
+                    </td>
+                    <td>[[ otherUser.numOfMatches]]</td>
+                </tr>
+            </tbody>
+        </table>
+    
+    </div>
+        
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let myApp = Vue.createApp({
+        delimiters: ["[[", "]]"],
+        data() {
+            return {
+                matches: [],
+            }
+        },
+        async created() {
+            let response = await fetch("{% url 'hobbymatch api' %}");
+            if (response.ok) {
+                console.log('sucess');
+                let data = await response.json();
+                this.matches=data.matches;
+                console.log(this.matches);
+            }
+            else {
+                alert("Failed to load matching data");
+            }
+        },
+        methods: {
+            
+
+        }
+    })
+    
+    myApp.mount('#app')
+</script>
+{% endblock %}

@@ -79,3 +79,25 @@ def test_api():
             for b in arr
         ]
     })
+
+def hobby_match_api(request):
+    user = get_object_or_404(User, id=request.user.id)
+    matches=[]
+    for otherUser in User.objects.all():
+        matchCount = 0
+        for userHobby in otherUser.hobbies.all():
+            if userHobby in user.hobbies.all():
+                matchCount+=1
+        matches.append((matchCount,otherUser.username))
+    matches = sorted(matches, key=lambda x: x[0],reverse=True)
+    return JsonResponse({
+        'matches':[
+            {
+                'numOfMatches':b[0],
+                'name':b[1]
+            }
+            for b in matches
+        ]
+    })
+
+
