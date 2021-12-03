@@ -17,6 +17,7 @@ urlpatterns = [
     path('api/user/city', api.user_city_api, name='user city api'),
     path('api/user/email', api.user_email_api, name='user email api'),
     path('api/user/dob', api.user_dob_api, name='user dob api'),
+    path('api/user/hobby', api.user_hobby_api, name='user hobbies api'),
 ]
 
 if settings.DEBUG:

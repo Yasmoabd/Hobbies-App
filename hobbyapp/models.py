@@ -18,7 +18,7 @@ class Hobby(models.Model):
 
 
 class User(AbstractUser):
-    profileImage = models.ImageField(upload_to='images', default="media/defaultpic.png")
+    profileImage = models.ImageField(upload_to='images/', default="media/defaultpic.png")
     email = models.EmailField()
     city = models.CharField(max_length=200)
     dateOfBirth = models.DateField(default=datetime.date.today)

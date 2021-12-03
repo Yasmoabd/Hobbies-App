@@ -13,12 +13,13 @@ def hobbies_api(request):
     })
 
 def user_api(request):
-    user = request.user
+    user = get_object_or_404(User, id=request.user.id)
     return JsonResponse({'user':{
         "dob":user.dateOfBirth,
         "email":user.email,
         "city":user.city,
-        "hobbies": [str(h) for h in user.hobbies.all()]
+        "hobbies": [str(h) for h in user.hobbies.all()],
+        "image":user.profileImage.url,
     }})
 
 def user_city_api(request):
@@ -45,5 +46,15 @@ def user_dob_api(request):
         user = get_object_or_404(User, id=request.user.id)
         data = json.load(request)
         user.dateOfBirth=data.get('dob')
+        user.save()
+        return JsonResponse({})
+
+def user_hobby_api(request):
+    if request.method == "POST":
+        user = get_object_or_404(User, id=request.user.id)
+        data = json.load(request)
+        user.hobbies.clear()
+        for hobbyid in data.get('hobbies'):
+            user.hobbies.add(Hobby.objects.get(id=hobbyid))
         user.save()
         return JsonResponse({})
