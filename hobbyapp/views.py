@@ -9,9 +9,15 @@ from django.utils import timezone
 from hobbyapp.forms import UserForm
 from .models import User,Hobby
 # Create your views here.
-def index(request):
-    
+def profile_view(request):
     return render(request, 'hobbyapp/hobbyapp.html',{
+        'title': "Hobbies App",
+    })
+
+
+def home_view(request):
+    
+    return render(request, 'hobbyapp/home.html',{
         'title': "Hobbies App",
     })
 
@@ -24,7 +30,7 @@ def login_view(request):
         )
         if user is not None:
             login(request, user)
-            return index(request)
+            return home_view(request)
         else:
             return HttpResponseForbidden("Invalid credentials")
 
@@ -45,7 +51,7 @@ def signup_view(request):
             user.set_password(form.cleaned_data['password'])
             user.save()
             login(request, user)
-            return index(request)
+            return home_view(request)
     return render(request, 'hobbyapp/signup.html', {
         'form': form,
     })

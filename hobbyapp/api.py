@@ -68,3 +68,14 @@ def user_hobby_api(request):
             for hobby in Hobby.objects.all()
         ]
     })
+
+def test_api():
+    arr=[]
+    return JsonResponse({
+        'best':[
+            {
+                'matches':b.matches
+            }
+            for b in arr
+        ]
+    })
