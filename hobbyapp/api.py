@@ -50,7 +50,7 @@ def user_dob_api(request):
         return JsonResponse({})
 
 def user_hobby_api(request):
-    if request.method == "POST":
+    if request.method == "PUT":
         user = get_object_or_404(User, id=request.user.id)
         data = json.load(request)
         user.hobbies.clear()
@@ -58,3 +58,13 @@ def user_hobby_api(request):
             user.hobbies.add(Hobby.objects.get(id=hobbyid))
         user.save()
         return JsonResponse({})
+    else:
+        data = json.load(request)
+        h = Hobby(name=data.get('name'))
+        h.save()
+        return JsonResponse({
+        'allHobbies': [
+            hobby.to_dict()
+            for hobby in Hobby.objects.all()
+        ]
+    })

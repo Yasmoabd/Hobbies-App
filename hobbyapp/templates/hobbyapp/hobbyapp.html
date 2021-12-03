@@ -48,6 +48,9 @@
                 <option v-for="(hobby) in allHobbies" v-bind:value="hobby.id" v-bind:myval="hobby.name">[[ hobby.name ]]</option>
             </select>
             <button type="button" v-on:click="changeHobbies">Save</button>
+            <label for="newHobby">Add new Hobby:</label><br>
+            <input type="text" id="newHobby" name="newHobby"><br>
+            <button type="button" v-on:click="addHobby">Add</button>
         </div>
         
     </div>
@@ -149,15 +152,33 @@
                         }
                     }
                 obj = {hobbies:selected};
+                let response = await fetch("{% url 'user hobbies api'%}",{method:"PUT", body: JSON.stringify(obj),
+                headers: {
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken").value,
+                        }});
+                if (response.ok) {
+                    
+                    this.user.hobbies=frontendSelected;
+                }
+                else{
+                    alert("Failed to chnage hobbies");
+                }
+
+            },
+
+            async addHobby(){
+                var hobbyName = document.getElementById('newHobby').value;
+                obj={name:hobbyName};
                 let response = await fetch("{% url 'user hobbies api'%}",{method:"POST", body: JSON.stringify(obj),
                 headers: {
                             "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken").value,
                         }});
                 if (response.ok) {
-                    this.user.hobbies=frontendSelected;
+                    let data = await response.json();
+                    this.allHobbies=data.allHobbies;
                 }
                 else{
-                    alert("Failed to chnage hobbies");
+                    alert("Failed to add hobbies");
                 }
 
             }
