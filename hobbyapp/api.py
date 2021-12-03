@@ -85,16 +85,19 @@ def hobby_match_api(request):
     matches=[]
     for otherUser in User.objects.all():
         matchCount = 0
+        matchingHobbies = []
         for userHobby in otherUser.hobbies.all():
             if userHobby in user.hobbies.all():
                 matchCount+=1
-        matches.append((matchCount,otherUser.username))
+                matchingHobbies.append(str(userHobby))
+        matches.append((matchCount,otherUser.username,matchingHobbies))
     matches = sorted(matches, key=lambda x: x[0],reverse=True)
     return JsonResponse({
         'matches':[
             {
                 'numOfMatches':b[0],
-                'name':b[1]
+                'name':b[1],
+                'hobbies':b[2],
             }
             for b in matches
         ]
