@@ -1,7 +1,9 @@
+import datetime
 import json
 from .models import User,Hobby
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+import dateutil.relativedelta
 
 def hobbies_api(request):
     
@@ -103,4 +105,27 @@ def hobby_match_api(request):
         ]
     })
 
-
+def filter(request):
+    data=json.load(request)
+    if(data.get('city')=="none"):
+        cityFilter = None
+    else:
+        cityFilter=data.get('city')
+    
+    if int(data.get('age'))<0:
+        ageFilter = None
+    else:
+        ageFilter=data.get('age')
+    
+    if(ageFilter==None and cityFilter==None):
+        return hobby_match_api(request)
+    else:
+        filteredUsers = []
+        if cityFilter==None:
+            for otherUser in User.objects.all():
+                datetime1 = otherUser.dateOfBirth
+                datetime2 = datetime.datetime.now()
+                time_difference = dateutil.relativedelta.relativedelta(datetime2, datetime1)
+                difference_in_years = time_difference.years
+                print(difference_in_years)    
+    return JsonResponse({})

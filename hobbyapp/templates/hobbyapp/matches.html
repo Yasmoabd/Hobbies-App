@@ -5,6 +5,20 @@
     <div id="app">
         <h1>Simliar Hobby Users</h1>
         <a href="{% url 'index'  %}">back Home</a>
+        <div>
+            <label for="city">Filter City:</label><br>
+            <input type="text" id="city" name="city"><br>
+            <p>Filter age:</p>
+            <input type="radio" id="age1" name="age" value="20">
+            <label for="age1">0 - 20</label><br>
+            <input type="radio" id="age2" name="age" value="30">
+            <label for="age2">20 - 30</label><br>  
+            <input type="radio" id="age3" name="age" value="40">
+            <label for="age3">30 - 40</label><br>
+            <input type="radio" id="age4" name="age" value="100">
+            <label for="age4">40+</label><br><br>
+            <button type="button" v-on:click="filter">Apply Filters</button>
+        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -48,14 +62,50 @@
                 console.log('sucess');
                 let data = await response.json();
                 this.matches=data.matches;
-                console.log(this.matches);
             }
             else {
                 alert("Failed to load matching data");
             }
         },
         methods: {
-            
+            async filter(){
+                var city = document.getElementById('city').value;
+                if(city==""){
+                    city = "none";
+                }
+
+                if (document.getElementById('age1').checked) {
+                    age = document.getElementById('age1').value;
+                }
+                else if (document.getElementById('age2').checked) {
+                    age = document.getElementById('age2').value;
+                }
+                else if (document.getElementById('age3').checked) {
+                    age = document.getElementById('age3').value;
+                }
+                else if (document.getElementById('age4').checked) {
+                    age = document.getElementById('age4').value;
+                }
+                else{
+                    age = -1;
+                }
+                
+
+                obj={city:city, age:age};
+                let response = await fetch("{% url 'filter'%}",{method:"POST", body: JSON.stringify(obj),
+                headers: {
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken").value,
+                        }});
+
+                
+                if (response.ok) {
+                    console.log('sucess filter');
+                }
+                else {
+                    alert("Failed to load filter data");
+                }
+                
+            }
 
         }
     })

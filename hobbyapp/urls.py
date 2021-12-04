@@ -15,6 +15,8 @@ urlpatterns = [
     path('home/', views.home_view, name='index'),
     path('profile/', views.profile_view, name='profile'),
     path('matches/', views.matches_view, name='matches'),
+    path('filter/', api.filter, name='filter'),
+    
 
     path('api/user', api.user_api, name='user api'),
     path('api/hobbies', api.hobbies_api, name='hobbies api'),
