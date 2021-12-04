@@ -112,20 +112,37 @@ def filter(request):
     else:
         cityFilter=data.get('city')
     
-    if int(data.get('age'))<0:
-        ageFilter = None
+    if int(data.get('upper'))<0:
+        ageFilter = -1
     else:
-        ageFilter=data.get('age')
-    
-    if(ageFilter==None and cityFilter==None):
+        ageFilter=int(data.get('upper'))
+    print(ageFilter,cityFilter)
+    if(ageFilter==-1 and cityFilter==None):
         return hobby_match_api(request)
     else:
         filteredUsers = []
-        if cityFilter==None:
+        if cityFilter!=None:
+            filteredByCity = User.objects.filter(city=data.get('city'))
+            print(filteredByCity)
+            for otherUser in filteredByCity:
+                filteredUsers.append(otherUser.username)
+        
+        if ageFilter>0:
+            lower = int(data.get('lower'))
+            upper = int(data.get('upper'))
+            print(upper,lower)
             for otherUser in User.objects.all():
                 datetime1 = otherUser.dateOfBirth
                 datetime2 = datetime.datetime.now()
                 time_difference = dateutil.relativedelta.relativedelta(datetime2, datetime1)
                 difference_in_years = time_difference.years
-                print(difference_in_years)    
-    return JsonResponse({})
+                if(difference_in_years>lower and difference_in_years<=upper):
+                    filteredUsers.append(otherUser.username)
+    return JsonResponse({
+        'matches':[
+            {
+                'name': b
+            }
+            for b in filteredUsers
+        ]
+    })

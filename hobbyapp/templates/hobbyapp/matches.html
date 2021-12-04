@@ -19,6 +19,9 @@
             <label for="age4">40+</label><br><br>
             <button type="button" v-on:click="filter">Apply Filters</button>
         </div>
+        <div>
+            <button type="button" v-on:click="clear">Clear Filters</button>
+        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -59,8 +62,7 @@
         async created() {
             let response = await fetch("{% url 'hobbymatch api' %}");
             if (response.ok) {
-                console.log('sucess');
-                let data = await response.json();
+                let data = await response.json()
                 this.matches=data.matches;
             }
             else {
@@ -69,6 +71,7 @@
         },
         methods: {
             async filter(){
+
                 var city = document.getElementById('city').value;
                 if(city==""){
                     city = "none";
@@ -76,35 +79,68 @@
 
                 if (document.getElementById('age1').checked) {
                     age = document.getElementById('age1').value;
+                    lower = 0;
                 }
                 else if (document.getElementById('age2').checked) {
                     age = document.getElementById('age2').value;
+                    lower = 20;
                 }
                 else if (document.getElementById('age3').checked) {
                     age = document.getElementById('age3').value;
+                    lower = 30;
                 }
                 else if (document.getElementById('age4').checked) {
                     age = document.getElementById('age4').value;
+                    lower = 40;
                 }
                 else{
                     age = -1;
+                    lower =-1;
+                }
+
+                let response1 = await fetch("{% url 'hobbymatch api' %}");
+                if (response1.ok) {
+                    let data = await response1.json()
+                    this.matches=data.matches;
+                }
+                else {
+                    alert("Failed to load matching data");
                 }
                 
 
-                obj={city:city, age:age};
-                let response = await fetch("{% url 'filter'%}",{method:"POST", body: JSON.stringify(obj),
+                obj={city:city, upper:age, lower:lower};
+                let response = await fetch("{% url 'filter'%}",{method: "POST",body: JSON.stringify(obj),
                 headers: {
                             "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken").value,
                         }});
-
-                
                 if (response.ok) {
-                    console.log('sucess filter');
+                    let data = await response.json();
+                    var found = false;
+                    this.matches.forEach(element1 => {
+                        var found = false;
+                        data.matches.forEach(element => {
+                            if(element1.name==element.name){
+                                found = true;
+                            }
+                        });
+                        if(found==false){
+                            this.matches = this.matches.filter(c => c.name != element1.name);
+                        }
+                    });
                 }
-                else {
-                    alert("Failed to load filter data");
+                else{
+                    alert("Failed to apply filters");
                 }
                 
+            },
+
+            async clear(){
+                document.getElementById('age1').checked = false;
+                document.getElementById('age2').checked = false;
+                document.getElementById('age3').checked = false;
+                document.getElementById('age4').checked = false;
+                document.getElementById('city').value="";
+                this.filter();
             }
 
         }
