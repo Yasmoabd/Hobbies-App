@@ -129,14 +129,17 @@ def filter(request):
         if ageFilter>0:
             lower = int(data.get('lower'))
             upper = int(data.get('upper'))
-            for name in filteredUsers:
-                user = get_object_or_404(User,username=name)
+        index = 0
+        while(index<len(filteredUsers)):
+                user = get_object_or_404(User,username=filteredUsers[index])
                 datetime1 = user.dateOfBirth
                 datetime2 = datetime.datetime.now()
                 time_difference = dateutil.relativedelta.relativedelta(datetime2, datetime1)
                 difference_in_years = time_difference.years
                 if(difference_in_years<lower or difference_in_years>upper):
-                    filteredUsers.remove(name)
+                    filteredUsers.remove(filteredUsers[index])
+                else:
+                    index+=1
     return JsonResponse({
         'matches':[
             {
