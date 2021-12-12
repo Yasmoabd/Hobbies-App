@@ -25,7 +25,7 @@ def user_api(request):
     }})
 
 def user_city_api(request):
-    if request.method == "POST":
+    if request.method == "PUT":
         id = request.user.id
         user = get_object_or_404(User, id=request.user.id)
         data = json.load(request)
@@ -34,7 +34,7 @@ def user_city_api(request):
         return JsonResponse({})
 
 def user_email_api(request):
-    if request.method == "POST":
+    if request.method == "PUT":
         id = request.user.id
         user = get_object_or_404(User, id=request.user.id)
         data = json.load(request)
@@ -43,7 +43,7 @@ def user_email_api(request):
         return JsonResponse({})
 
 def user_dob_api(request):
-    if request.method == "POST":
+    if request.method == "PUT":
         id = request.user.id
         user = get_object_or_404(User, id=request.user.id)
         data = json.load(request)
