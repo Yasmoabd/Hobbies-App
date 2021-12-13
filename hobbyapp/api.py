@@ -1,9 +1,45 @@
 import datetime
 import json
-from .models import User,Hobby
+from .models import Friend_Request, User,Hobby
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 import dateutil.relativedelta
+
+def add_friend_api(request):
+    user = get_object_or_404(User, id=request.user.id)
+    data = json.load(request)
+    otheruserID = data.get('ID')
+    friend = get_object_or_404(User, id=otheruserID)
+    user.friends.add(friend)
+
+def friend_requests_api(request):
+    user = get_object_or_404(User, id=request.user.id)
+    reqs = []
+    for friendreq in Friend_Request.objects.all():
+        if friendreq.to_user==user:
+            reqs.append(friendreq)
+
+    return JsonResponse({
+        'friendRequests':[
+            {
+                'ID':req.id,
+                'name':req.from_user.username,
+            }
+            for req in reqs
+        ]
+    })
+
+
+def friends_api(request):
+    
+    user = get_object_or_404(User, id=request.user.id)
+    
+    return JsonResponse({
+        'friends': [
+            friend.username
+            for friend in user.friends.all()
+        ]
+    })
 
 def hobbies_api(request):
     
@@ -25,7 +61,7 @@ def user_api(request):
     }})
 
 def user_city_api(request):
-    if request.method == "PUT":
+    if request.method == "POST":
         id = request.user.id
         user = get_object_or_404(User, id=request.user.id)
         data = json.load(request)
@@ -34,7 +70,7 @@ def user_city_api(request):
         return JsonResponse({})
 
 def user_email_api(request):
-    if request.method == "PUT":
+    if request.method == "POST":
         id = request.user.id
         user = get_object_or_404(User, id=request.user.id)
         data = json.load(request)
@@ -92,7 +128,7 @@ def hobby_match_api(request):
             if userHobby in user.hobbies.all():
                 matchCount+=1
                 matchingHobbies.append(str(userHobby))
-        matches.append((matchCount,otherUser.username,matchingHobbies))
+        matches.append((matchCount,otherUser.username,matchingHobbies,otherUser.id))
     matches = sorted(matches, key=lambda x: x[0],reverse=True)
     return JsonResponse({
         'matches':[
@@ -100,6 +136,7 @@ def hobby_match_api(request):
                 'numOfMatches':b[0],
                 'name':b[1],
                 'hobbies':b[2],
+                'id': b[3],
             }
             for b in matches
         ]
@@ -129,17 +166,14 @@ def filter(request):
         if ageFilter>0:
             lower = int(data.get('lower'))
             upper = int(data.get('upper'))
-        index = 0
-        while(index<len(filteredUsers)):
-                user = get_object_or_404(User,username=filteredUsers[index])
+            for name in filteredUsers:
+                user = get_object_or_404(User,username=name)
                 datetime1 = user.dateOfBirth
                 datetime2 = datetime.datetime.now()
                 time_difference = dateutil.relativedelta.relativedelta(datetime2, datetime1)
                 difference_in_years = time_difference.years
                 if(difference_in_years<lower or difference_in_years>upper):
-                    filteredUsers.remove(filteredUsers[index])
-                else:
-                    index+=1
+                    filteredUsers.remove(name)
     return JsonResponse({
         'matches':[
             {

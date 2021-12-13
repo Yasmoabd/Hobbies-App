@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from django.utils import timezone
 from django.http.response import HttpResponse, HttpResponseForbidden
@@ -23,6 +24,12 @@ def profile_view(request):
 def home_view(request):
     
     return render(request, 'hobbyapp/home.html',{
+        'title': "Hobbies App",
+    })
+
+def friends_view(request):
+    
+    return render(request, 'hobbyapp/friends.html',{
         'title': "Hobbies App",
     })
 
@@ -62,20 +69,26 @@ def signup_view(request):
     })
 
 
-def send_friend_request(request, UserID):
+def send_friend_request(request):
+    data = json.load(request)
+    UserID = data.get('uID')
     from_user = request.user
     to_user = User.objects.get(id=UserID)
     friend_request, created = Friend_Request.objects.get_or_create(
         from_user=from_user, to_user=to_user
     )
     if (created):
-        HttpResponse("Friend request sent")
+        return HttpResponse("Friend request sent")
     else:
-        HttpResponse("Friend request already sent")
+        return HttpResponse("Friend request already sent")
 
-def accept_friend_request(request, requestID):
+def accept_friend_request(request):
+    user = User.objects.get(id=request.user.id)
+    data = json.load(request)
+    requestID = data.get('ID')
     friend_request = Friend_Request.objects.get(id=requestID)
-    if friend_request.to_user == requestID:
+    if friend_request.to_user.id == user.id :
+        print("succes")
         friend_request.to_user.friends.add(friend_request.from_user)
         friend_request.from_user.friends.add(friend_request.to_user)
         friend_request.delete()
