@@ -25,7 +25,7 @@ def user_api(request):
     }})
 
 def user_city_api(request):
-    if request.method == "POST":
+    if request.method == "PUT":
         id = request.user.id
         user = get_object_or_404(User, id=request.user.id)
         data = json.load(request)
@@ -34,7 +34,7 @@ def user_city_api(request):
         return JsonResponse({})
 
 def user_email_api(request):
-    if request.method == "POST":
+    if request.method == "PUT":
         id = request.user.id
         user = get_object_or_404(User, id=request.user.id)
         data = json.load(request)
@@ -43,7 +43,7 @@ def user_email_api(request):
         return JsonResponse({})
 
 def user_dob_api(request):
-    if request.method == "POST":
+    if request.method == "PUT":
         id = request.user.id
         user = get_object_or_404(User, id=request.user.id)
         data = json.load(request)
@@ -129,14 +129,17 @@ def filter(request):
         if ageFilter>0:
             lower = int(data.get('lower'))
             upper = int(data.get('upper'))
-            for name in filteredUsers:
-                user = get_object_or_404(User,username=name)
+        index = 0
+        while(index<len(filteredUsers)):
+                user = get_object_or_404(User,username=filteredUsers[index])
                 datetime1 = user.dateOfBirth
                 datetime2 = datetime.datetime.now()
                 time_difference = dateutil.relativedelta.relativedelta(datetime2, datetime1)
                 difference_in_years = time_difference.years
                 if(difference_in_years<lower or difference_in_years>upper):
-                    filteredUsers.remove(name)
+                    filteredUsers.remove(filteredUsers[index])
+                else:
+                    index+=1
     return JsonResponse({
         'matches':[
             {
