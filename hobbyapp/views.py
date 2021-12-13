@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 
 from hobbyapp.forms import UserForm
-from .models import User,Hobby
+from .models import Friend_Request, User,Hobby
 # Create your views here.
 def matches_view(request):
     return render(request, 'hobbyapp/matches.html',{
@@ -61,5 +61,25 @@ def signup_view(request):
         'form': form,
     })
 
+
+def send_friend_request(request, UserID):
+    from_user = request.user
+    to_user = User.objects.get(id=UserID)
+    friend_request, created = Friend_Request.objects.get_or_create(
+        from_user=from_user, to_user=to_user
+    )
+    if (created):
+        HttpResponse("Friend request sent")
+    else:
+        HttpResponse("Friend request already sent")
+
+def accept_friend_request(request, requestID):
+    friend_request = Friend_Request.objects.get(id=requestID)
+    if friend_request.to_user == requestID:
+        friend_request.to_user.friends.add(friend_request.from_user)
+        friend_request.from_user.friends.add(friend_request.to_user)
+        friend_request.delete()
+        return HttpResponse("Friend accepted")
+    return HttpResponse("Friend not accepted")
 
 

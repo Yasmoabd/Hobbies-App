@@ -25,6 +25,10 @@ urlpatterns = [
     path('api/user/dob', api.user_dob_api, name='user dob api'),
     path('api/user/hobby', api.user_hobby_api, name='user hobbies api'),
     path('api/hobbymatch', api.hobby_match_api, name='hobbymatch api'),
+
+    path('send_friend_request/<int:userID>/', views.send_friend_request, name='send friend request'),
+    path('accept_friend_request/<int:requestID>/', views.accept_friend_request, name='accept friend request'),
+
 ]
 
 if settings.DEBUG:

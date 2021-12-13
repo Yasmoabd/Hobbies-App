@@ -29,6 +29,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Number of matching hobbies</th>
                     <th scope="col">Matching hobbies</th>
+                    <th scope="col">Send Friend Request</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,6 +42,8 @@
                     </td>
                     <td>[[ otherUser.numOfMatches]]</td>
                     <td>[[ otherUser.hobbies]]</td>
+                    <td>[[ otherUser.id ]]</td>
+                    <td><button @click="addFriend(otherUser)">Add Friend</button></td>
                 </tr>
             </tbody>
         </table>
@@ -57,6 +60,8 @@
         data() {
             return {
                 matches: [],
+                users: [],
+                id: null
             }
         },
         async created() {
@@ -141,8 +146,19 @@
                 document.getElementById('age4').checked = false;
                 document.getElementById('city').value="";
                 this.filter();
-            }
+            },
 
+            setID(index){
+                this.id = index
+                console.log(this.id)
+                
+            },
+
+
+            async addFriend(otherUser){
+                console.log(otherUser.id)
+
+            },
         }
     })
     
