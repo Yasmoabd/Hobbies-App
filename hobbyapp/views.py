@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from django.utils import timezone
 from django.http.response import HttpResponse, HttpResponseForbidden
@@ -23,6 +24,12 @@ def profile_view(request):
 def home_view(request):
     
     return render(request, 'hobbyapp/home.html',{
+        'title': "Hobbies App",
+    })
+
+def friends_view(request):
+    
+    return render(request, 'hobbyapp/friends.html',{
         'title': "Hobbies App",
     })
 
@@ -62,7 +69,9 @@ def signup_view(request):
     })
 
 
-def send_friend_request(request, UserID):
+def send_friend_request(request):
+    data = json.load(request)
+    UserID = data.get('uID')
     from_user = request.user
     to_user = User.objects.get(id=UserID)
     friend_request, created = Friend_Request.objects.get_or_create(

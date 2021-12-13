@@ -5,6 +5,7 @@
     <div id="app">
         <h1>Simliar Hobby Users</h1>
         <a href="{% url 'index'  %}">back Home</a>
+        <a href="{% url 'friends'  %}">Friends</a>
         <div>
             <label for="city">Filter City:</label><br>
             <input type="text" id="city" name="city"><br>
@@ -156,7 +157,31 @@
 
 
             async addFriend(otherUser){
+                var userID = otherUser.id
                 console.log(otherUser.id)
+                obj={uID:userID};
+                let response = await fetch("{% url 'send friend request'%}",{method: "POST",body: JSON.stringify(obj),
+                headers: {
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken").value,
+                        }});
+                if (response.ok) {
+                    let data = await response.json();
+                    var found = false;
+                    this.matches.forEach(element1 => {
+                        var found = false;
+                        data.matches.forEach(element => {
+                            if(element1.name==element.name){
+                                found = true;
+                            }
+                        });
+                        if(found==false){
+                            this.matches = this.matches.filter(c => c.name != element1.name);
+                        }
+                    });
+                }
+                else{
+                    alert("Failed to apply filters");
+                }
 
             },
         }

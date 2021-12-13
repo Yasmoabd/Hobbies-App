@@ -10,6 +10,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('signup/', views.signup_view, name='signup'),
     path('', views.login_view, name='login'),
+    path('friends/', views.friends_view, name='friends'),
     path('logout/', views.logout_view, name='logout'),
 
     path('home/', views.home_view, name='index'),
@@ -26,7 +27,7 @@ urlpatterns = [
     path('api/user/hobby', api.user_hobby_api, name='user hobbies api'),
     path('api/hobbymatch', api.hobby_match_api, name='hobbymatch api'),
 
-    path('send_friend_request/<int:userID>/', views.send_friend_request, name='send friend request'),
+    path('send_friend_request', views.send_friend_request, name='send friend request'),
     path('accept_friend_request/<int:requestID>/', views.accept_friend_request, name='accept friend request'),
 
 ]
