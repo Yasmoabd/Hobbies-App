@@ -3,14 +3,13 @@
 {% block content %}
 {% csrf_token %}
     <div id="app">
-        <h1>Simliar Hobby Users</h1>
-        <a href="{% url 'index'  %}">back Home</a>
+        <h1>Friends</h1>
+        
 
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Friend</th>
+                    <th scope="col">Friends
                 </tr>
             </thead>
             <tbody>
@@ -28,11 +27,8 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Hobbies</th>
-                    <th scope="col">Accept</th>
-                    <th scope="col">Delete</th>
+                    <th scope="col">Friend Requests</th>
+        
                 </tr>
             </thead>
             <tbody>
@@ -41,9 +37,9 @@
                         [[ index ]]
                     </th>
                     <td>[[ request.name ]]</td>
-                    <td>[[ request.ID ]]</td>
-                    <td><button @click="addFriend(request.ID)">Add Friend</button></td>
-                    <td><button @click="delFriend(otherUser)">Delete Friend</button></td>
+                    <td><a class="btn btn-primary" @click="addFriend(request.ID)" role="button"> Accept</a></td>
+                    <td><a class="btn btn-danger" @click="delFriend(request.ID)" role="button"> Reject</a></td>
+
                 </tr>
             </tbody>
         </table>
@@ -90,7 +86,20 @@
                 console.log(this.id)
                 
             },
-
+            async delFriend(reqID){
+                obj={ID:reqID};
+                let response = await fetch("{% url 'del req'%}",{method: "DELETE",body: JSON.stringify(obj),
+                headers: {
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken").value,
+                        }});
+                if (response.ok) {
+                    alert('friend req deletd')
+                }
+                else{
+                    alert("Failed to delted friend req");
+                }
+                this.updatetables();
+            },
 
             async addFriend(otherUserID){
                 
@@ -105,9 +114,29 @@
                 else{
                     alert("Failed to add friend");
                 }
-                this.created();
+                this.updatetables();
 
             },
+
+            async updatetables(){
+                let response = await fetch("{% url 'friends api' %}");
+            if (response.ok) {
+                let data = await response.json()
+                this.friends=data.friends;
+            }
+            else {
+                alert("Failed to load friends data");
+            }
+
+            let response2 = await fetch("{% url 'friend request api' %}");
+            if (response2.ok) {
+                let data = await response2.json()
+                this.friendRequests=data.friendRequests;
+            }
+            else {
+                alert("Failed to load friends requets data");
+            }
+            }
         }
     })
     

@@ -5,6 +5,14 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 import dateutil.relativedelta
 
+def del_req(request):
+    if request.method == 'DELETE':
+        data = json.load(request)
+        reqid = data.get('ID')
+        req = get_object_or_404(Friend_Request, id=reqid)
+        req.delete()
+        return JsonResponse({})
+
 def add_friend_api(request):
     user = get_object_or_404(User, id=request.user.id)
     data = json.load(request)

@@ -29,6 +29,7 @@ urlpatterns = [
     path('api/friends', api.friends_api, name='friends api'),
     path('api/friendreq', api.friend_requests_api, name='friend request api'),
     path('api/addfriend', api.add_friend_api, name='add friend api'),
+    path('api/delreq', api.del_req, name='del req'),
 
     path('send_friend_request', views.send_friend_request, name='send friend request'),
     path('accept_friend_request', views.accept_friend_request, name='accept friend request'),

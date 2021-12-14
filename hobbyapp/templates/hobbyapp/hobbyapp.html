@@ -4,54 +4,63 @@
 {% csrf_token %}
     <div id="app">
         <div>
-            <h1>PROFILE PAGE</h1>
-            <a href="{% url 'index'  %}">back Home</a>
+            <h1>Profile</h1>
         </div>
         <div>
-            <h2>Profile pic</h2>
+            <h2>Display picture</h2>
             <img v-bind:src="user.image"  style="width:100px;height:100px;">
             <label for="pic">ENTER NEW PICTURE PATH:</label><br>
             <input type="text" id="pic" name="pic"><br>
-            <button type="button" v-on:click="changePic">Save</button>
+            <a class="btn btn-success" v-on:click="changePic" role="button"> Save</a>
+            
         </div>
         <div>
             <h2>City:</h2>
-            [[user.city]]
+            <h6 class="text-capitalize">[[user.city]]</h6>
             <form>
                 <label for="city">CHANGE CITY:</label><br>
                 <input type="text" id="city" name="city"><br>
               </form>
-              <button type="button" v-on:click="changeCity">Save</button>
+              <a class="btn btn-success" v-on:click="changeCity" role="button"> Save</a>
+              
         </div>
         <div>
             <h2>Email Adress:</h2>
-            [[user.email]]
+            <h6 class="text-capitalize">[[user.email]]</h6>
             <form>
                 <label for="email">CHANGE EMAIL:</label><br>
                 <input type="text" id="email" name="email"><br>
               </form>
-              <button type="button" v-on:click="changeEmail">Save</button>
+              <a class="btn btn-success" v-on:click="changeEmail" role="button"> Save</a>
+             
         </div>
-        <div>
+        <div class="pt-2">
             <h2>Date of Birth:</h2>
-            [[user.dob]]
+            <h6 class="text-capitalize">[[user.dob]]</h6>
             <form>
                 <label for="dob">CHANGE D.O.B:</label><br>
                 <input type="date" id="dob" name="dob"><br>
               </form>
-              <button type="button" v-on:click="changedob">Save</button>
+              <a class="btn btn-success" v-on:click="changedob" role="button"> Save</a>
+              
         </div>
-        <div>
-            <h2>Hobbies:</h2>
-            [[user.hobbies]]
-            <p>CHANGE HOBBIES:</p>
-            <select id="hobbyDrop" name="hobbyDrop" id="hobbyDrop" multiple>
-                <option v-for="(hobby) in allHobbies" v-bind:value="hobby.id" v-bind:myval="hobby.name">[[ hobby.name ]]</option>
-            </select>
-            <button type="button" v-on:click="changeHobbies">Save</button>
-            <label for="newHobby">Add new Hobby:</label><br>
-            <input type="text" id="newHobby" name="newHobby"><br>
-            <button type="button" v-on:click="addHobby">Add</button>
+        <div class="px-2">
+            <div>
+                <h2>Hobbies:</h2>
+                <h6 class="text-capitalize">[[user.hobbies]]</h6>
+                <p>CHANGE HOBBIES:</p>
+                <select id="hobbyDrop" name="hobbyDrop" id="hobbyDrop" multiple>
+                    <option v-for="(hobby) in allHobbies" v-bind:value="hobby.id" v-bind:myval="hobby.name">[[ hobby.name ]]</option>
+                </select>
+
+                <a class="btn btn-success" v-on:click="changeHobbies" role="button">Save</a>
+            </div>
+            <div>
+                <label for="newHobby">Add new Hobby:</label><br>
+                <input type="text" id="newHobby" name="newHobby"><br>
+                <a class="btn btn-success" v-on:click="addHobby" role="button">Add</a>
+
+            </div>
         </div>
         
     </div>
