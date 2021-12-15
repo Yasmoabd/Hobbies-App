@@ -1,8 +1,21 @@
 import datetime
 import json
+from PIL import Image
+from django.db.models.fields.files import ImageField
 from .models import Friend_Request, User,Hobby
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+
+def user_pic_api(request):
+    if request.method == "PUT":
+        id = request.user.id
+        user = get_object_or_404(User, id=request.user.id)
+        data = json.load(request)
+        image = Image.open(data.get('pic'))
+        user.profileImage=image
+        user.save()
+        return JsonResponse({})
+
 
 def del_req(request):
     if request.method == 'DELETE':
@@ -191,6 +204,8 @@ def filter(request):
             for b in filteredUsers
         ]
     })
+
+
 
 
 

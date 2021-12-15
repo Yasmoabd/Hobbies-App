@@ -10,7 +10,11 @@
             <h2>Display picture</h2>
             <img v-bind:src="user.image"  style="width:100px;height:100px;">
             <br>
-            <input class="form-control px-2" type="text" id="pic" name="pic" placeholder="Enter new picture path"><br>
+            
+            <!--
+               <input class="form-control px-2" type="text" id="pic" name="pic" placeholder="Enter new picture path"><br> 
+            -->
+            <input type="file" id="myFile" accept="image/*" name="filename">
             <a class="btn btn-success" v-on:click="changePic" role="button"> Save</a>
             
         </div>
@@ -146,9 +150,19 @@
             },
 
             async changePic(){
-                src = document.getElementById('pic').value;
-                this.user.image=src;
-                console.log(src);
+                console.log("object")
+                src = document.getElementById('myFile').value;
+                obj = {pic:src};
+                let response = await fetch("{% url 'user pic api'%}",{method:"PUT", body: JSON.stringify(obj),
+                headers: {
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken").value,
+                        }});
+                if (response.ok) {
+                    this.user.image=src;
+                }
+                else{
+                    alert("Failed to chnage pic");
+                }
             },
 
             async changeHobbies(){

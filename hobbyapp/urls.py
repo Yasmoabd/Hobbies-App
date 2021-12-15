@@ -34,6 +34,8 @@ urlpatterns = [
     path('send_friend_request', views.send_friend_request, name='send friend request'),
     path('accept_friend_request', views.accept_friend_request, name='accept friend request'),
 
+    path('api/user/pic', api.user_pic_api, name='user pic api'),
+
 ]
 
 if settings.DEBUG:
