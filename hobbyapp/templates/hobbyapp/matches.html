@@ -6,9 +6,9 @@
         <h1>Simliar Hobby Users</h1>
         
         
-        <div>
+        <div class="px-2">
             <label for="city">Filter City:</label><br>
-            <input type="text" id="city" name="city"><br>
+            <input class="form-control" type="text" id="city" name="city"><br>
             <p>Filter age:</p>
             <input type="radio" id="age1" name="age" value="20">
             <label for="age1">0 - 20</label><br>
@@ -18,12 +18,12 @@
             <label for="age3">30 - 40</label><br>
             <input type="radio" id="age4" name="age" value="100">
             <label for="age4">40+</label><br><br>
-            <button type="button" v-on:click="filter">Apply Filters</button>
+            <button class="btn btn-success" type="button" v-on:click="filter">Apply Filters</button>
         </div>
-        <div>
-            <button type="button" v-on:click="clear">Clear Filters</button>
+        <div class="px-2">
+            <button class="btn btn-danger" type="button" v-on:click="clear">Clear Filters</button>
         </div>
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -44,7 +44,7 @@
                     <td>[[ otherUser.numOfMatches]]</td>
                     <td>[[ otherUser.hobbies]]</td>
                     <td>[[ otherUser.id ]]</td>
-                    <td><button @click="addFriend(otherUser)">Add Friend</button></td>
+                    <td><button class="btn btn-primary" @click="addFriend(otherUser)">Add Friend</button></td>
                 </tr>
             </tbody>
         </table>

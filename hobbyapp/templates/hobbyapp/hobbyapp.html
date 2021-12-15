@@ -2,44 +2,44 @@
 
 {% block content %}
 {% csrf_token %}
-    <div id="app">
+    <div class="px-3" id="app">
         <div>
             <h1>Profile</h1>
         </div>
         <div>
             <h2>Display picture</h2>
             <img v-bind:src="user.image"  style="width:100px;height:100px;">
-            <label for="pic">ENTER NEW PICTURE PATH:</label><br>
-            <input type="text" id="pic" name="pic"><br>
+            <br>
+            <input class="form-control px-2" type="text" id="pic" name="pic" placeholder="Enter new picture path"><br>
             <a class="btn btn-success" v-on:click="changePic" role="button"> Save</a>
             
         </div>
-        <div>
+        <div> 
             <h2>City:</h2>
-            <h6 class="text-capitalize">[[user.city]]</h6>
+            <h6 class="text-capitalize"> Current City: [[user.city]]</h6>
             <form>
-                <label for="city">CHANGE CITY:</label><br>
-                <input type="text" id="city" name="city"><br>
+                
+                <input class="form-control" type="text" id="city" name="city" placeholder="Enter new city"><br>
               </form>
               <a class="btn btn-success" v-on:click="changeCity" role="button"> Save</a>
               
         </div>
         <div>
-            <h2>Email Adress:</h2>
-            <h6 class="text-capitalize">[[user.email]]</h6>
+            <h2>Email Address:</h2>
+            <h6 class="text-capitalize">Current Email Address:[[user.email]]</h6>
             <form>
-                <label for="email">CHANGE EMAIL:</label><br>
-                <input type="text" id="email" name="email"><br>
+                
+                <input class="form-control" type="text" id="email" name="email" placeholder="Enter new email"><br>
               </form>
               <a class="btn btn-success" v-on:click="changeEmail" role="button"> Save</a>
              
         </div>
         <div class="pt-2">
             <h2>Date of Birth:</h2>
-            <h6 class="text-capitalize">[[user.dob]]</h6>
+            <h6 class="text-capitalize">Current Date of Birth: [[user.dob]]</h6>
             <form>
-                <label for="dob">CHANGE D.O.B:</label><br>
-                <input type="date" id="dob" name="dob"><br>
+               
+                <input class="form-control" type="date" id="dob" name="dob" placeholder="Enter new Date of Birth"><br>
               </form>
               <a class="btn btn-success" v-on:click="changedob" role="button"> Save</a>
               
@@ -49,15 +49,15 @@
                 <h2>Hobbies:</h2>
                 <h6 class="text-capitalize">[[user.hobbies]]</h6>
                 <p>CHANGE HOBBIES:</p>
-                <select id="hobbyDrop" name="hobbyDrop" id="hobbyDrop" multiple>
+                <select class="form-control" id="hobbyDrop" name="hobbyDrop" id="hobbyDrop" multiple>
                     <option v-for="(hobby) in allHobbies" v-bind:value="hobby.id" v-bind:myval="hobby.name">[[ hobby.name ]]</option>
                 </select>
 
                 <a class="btn btn-success" v-on:click="changeHobbies" role="button">Save</a>
             </div>
             <div>
-                <label for="newHobby">Add new Hobby:</label><br>
-                <input type="text" id="newHobby" name="newHobby"><br>
+                <br>
+                <input class="form-control" type="text" id="newHobby" name="newHobby" placeholder="Add new Hobby"><br>
                 <a class="btn btn-success" v-on:click="addHobby" role="button">Add</a>
 
             </div>
