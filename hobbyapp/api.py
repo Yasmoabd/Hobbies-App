@@ -3,7 +3,6 @@ import json
 from .models import Friend_Request, User,Hobby
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
-import dateutil.relativedelta
 
 def del_req(request):
     if request.method == 'DELETE':
@@ -174,14 +173,16 @@ def filter(request):
         if ageFilter>0:
             lower = int(data.get('lower'))
             upper = int(data.get('upper'))
-            for name in filteredUsers:
-                user = get_object_or_404(User,username=name)
-                datetime1 = user.dateOfBirth
-                datetime2 = datetime.datetime.now()
-                time_difference = dateutil.relativedelta.relativedelta(datetime2, datetime1)
-                difference_in_years = time_difference.years
+            index = 0
+            while(index<len(filteredUsers)):
+                user = get_object_or_404(User,username=filteredUsers[index])
+                datetime1 = user.dateOfBirth.year
+                now = datetime.datetime.now().year
+                difference_in_years = abs(datetime1-now)
                 if(difference_in_years<lower or difference_in_years>upper):
-                    filteredUsers.remove(name)
+                    filteredUsers.remove(filteredUsers[index])
+                else:
+                    index+=1
     return JsonResponse({
         'matches':[
             {
