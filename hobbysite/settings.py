@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = ['https://.deploytest-deploytest.apps.kube.eecs.qmul.ac.uk', "https://.127.0.0.1"]
+CSRF_TRUSTED_ORIGINS = ['https://django-psql-persistent-group46.apps.kube.eecs.qmul.ac.uk/', "https://.127.0.0.1"]
 
 # Application definition
 
